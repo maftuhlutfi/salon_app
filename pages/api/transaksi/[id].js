@@ -12,11 +12,10 @@ async function handler(req, res) {
         }
     }
     if (req.method == 'PUT') {
-        const {id_pelanggan, status_transaksi, tipe_bayar, status_pembayaran, tgl_bayar, alamat_kirim} = req.body
+        const {status_transaksi, status_pembayaran, tgl_bayar} = req.body
         try {
-            const result = await query(`UPDATE transaksi SET id_pelanggan=?, status_transaksi=?, tipe_bayar=?, status_pembayaran=?, tgl_bayar=?, alamat_kirim=? WHERE id_transaksi=?`, 
-                [id_pelanggan, status_transaksi, tipe_bayar, status_pembayaran, tgl_bayar, alamat_kirim, id])
-            console.log(result)
+            const result = await query(`UPDATE transaksi SET status_transaksi=?, status_pembayaran=?, tgl_bayar=? WHERE id_transaksi=?`, 
+                [status_transaksi, status_pembayaran, tgl_bayar, id])
             return res.send('Transaksi berhasil diupdate.')
         } catch (e) {
             res.status(500).send('Terjadi kesalahan. Coba lagi beberapa saat.')
@@ -24,9 +23,10 @@ async function handler(req, res) {
     }
     if (req.method == 'DELETE') {
         try {
-            await query(`DELETE FROM transaksi WHERE id_tansaksi=?`, [id])
+            const result = await query(`DELETE FROM transaksi WHERE id_transaksi=?`, [id])
             return res.send('Transaksi berhasil dihapus.')
         } catch (e) {
+            console.log(id, e)
             res.status(500).send('Terjadi kesalahan. Coba lagi beberapa saat.')
         }
     }

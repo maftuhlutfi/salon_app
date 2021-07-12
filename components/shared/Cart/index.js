@@ -22,6 +22,10 @@ const Cart = () => {
     const [showTransaksiModal, setShowTransaksiModal] = useState(false)
 
     const handleClick = e => {
+        if (!node.current) {
+            return
+        }
+
         if (node.current.contains(e.target)) {
           return;
         }

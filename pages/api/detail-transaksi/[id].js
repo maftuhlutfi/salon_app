@@ -5,7 +5,7 @@ async function handler(req, res) {
     const {id} = req.query
     if (req.method == 'GET') {
         try {
-            const result = await query(`SELECT dt.id_transaksi, dt.id_produk, p.nama_produk, dt.jumlah, p.harga_jual as harga, (p.harga_jual*dt.jumlah) as total_harga 
+            const result = await query(`SELECT dt.id_transaksi, dt.id_produk, p.nama_produk, dt.jumlah, p.harga_jual as harga, p.gambar_produk, (p.harga_jual*dt.jumlah) as total_harga 
                 FROM detail_transaksi dt INNER JOIN produk p 
                 WHERE dt.id_produk = p.id_produk AND dt.id_transaksi = ?
             `, [id])
