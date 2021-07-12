@@ -13,7 +13,7 @@ async function handler(req, res) {
     const {id} = req.query
     if (req.method == 'GET') {
         try {
-            const result = await query(`SELECT p.id_produk, p.nama_produk, p.harga_jual, p.qty, p.gambar_produk, p.deskripsi, k.nama_kategori AS kategori FROM produk p
+            const result = await query(`SELECT p.id_produk, p.nama_produk, p.harga_jual, p.qty, p.gambar_produk, p.deskripsi, k.nama_kategori AS kategori, k.id_kategori FROM produk p
                 INNER JOIN kategori k ON p.id_kategori = k.id_kategori WHERE p.id_produk=?`, [id])
             return res.json(result[0])
         } catch (e) {
@@ -32,12 +32,18 @@ async function handler(req, res) {
                 if (err) {
                     return res.status(500).send('Terjadi kesalahan. Coba lagi beberapa saat.')
                 }
+
+                const {kategori, nama, harga, qty, deskripsi, isUpdatePicture} = req.body
+                console.log(kategori)
+
+                const filename = isUpdatePicture == 'true' ? req.file.filename : gambar
                 
-                const {kategori, nama, harga, qty, deskripsi} = req.body
-                const filename = req.file.filename
                 try {
-                    await query(`UPDATE produk SET id_kategori=?, nama_produk=?, harga_jual=?, qty=?, gambar_produk=?, deskripsi=? WHERE id_produk=?`, [kategori, nama, harga, qty, filename, deskripsi, id])
-                    fs.unlinkSync('./public/uploads/produk/'+gambar)
+                    const result1 = await query(`UPDATE produk SET id_kategori=?, nama_produk=?, harga_jual=?, qty=?, gambar_produk=?, deskripsi=? WHERE id_produk=?`, [kategori, nama, harga, qty, filename, deskripsi, id])
+                    console.log(result1)
+                    if (isUpdatePicture == 'true') {
+                        fs.unlinkSync('./public/uploads/produk/'+gambar)
+                    }
                     return res.send('Produk berhasil diupdate.')
                 } catch (e) {
                     console.log(e)

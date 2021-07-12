@@ -11,7 +11,7 @@ export const config = {
 async function handler(req, res) {
     if (req.method == 'GET') {
         try {
-            const result = await query(`SELECT p.id_produk, p.nama_produk, p.harga_jual, p.qty, p.gambar_produk, p.deskripsi, k.nama_kategori AS kategori FROM produk p
+            const result = await query(`SELECT p.id_produk, p.nama_produk, p.harga_jual, p.qty, p.gambar_produk, p.deskripsi, k.nama_kategori, k.id_kategori AS kategori FROM produk p
                 INNER JOIN kategori k ON p.id_kategori = k.id_kategori `)
             return res.json(result)
         } catch (e) {
