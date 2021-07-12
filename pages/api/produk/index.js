@@ -27,7 +27,8 @@ async function handler(req, res) {
             const {kategori, nama, harga, qty, deskripsi} = req.body
             const filename = req.file.filename
             try {
-                await query(`INSERT INTO produk (id_kategori, nama_produk, harga_jual, qty, gambar_produk, deskripsi) VALUES (?,?,?,?,?,?)`, [kategori, nama, harga, qty, filename, deskripsi])
+                const result = await query(`INSERT INTO produk (id_kategori, nama_produk, harga_jual, qty, gambar_produk, deskripsi) VALUES (?,?,?,?,?,?)`, [kategori, nama, harga, qty, filename, deskripsi])
+                console.log(result)
                 return res.send('Produk berhasil ditambahkan.')
             } catch (e) {
                 res.status(500).send('Terjadi kesalahan. Coba lagi beberapa saat.')

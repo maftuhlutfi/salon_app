@@ -12,3 +12,7 @@ export const clearItem = item => ({
     type: 'CLEAR_ITEM_FROM_CART',
     payload: item
 })
+
+export const clearAllItem = () => ({
+    type: 'CLEAR_ALL_ITEM',
+})

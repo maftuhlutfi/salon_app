@@ -6,7 +6,7 @@ const NavigationItem = ({href, title, icon}) => {
 
     return (
         <Link href={href}>
-            <div className={`cursor-pointer flex items-center gap-6 text-lg py-3 px-8 hover:bg-gray-200 ${isActive && 'bg-black text-white hover:bg-black hover:text-white'}`}>
+            <div className={`cursor-pointer flex items-center gap-6 text-lg py-3 px-8 w-48 whitespace-nowrap ${isActive ? 'bg-black text-white hover:bg-black hover:text-white' : 'hover:bg-gray-200'}`}>
                 <i className={`${icon}`} />
                 {title}
             </div>

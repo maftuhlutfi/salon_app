@@ -33,6 +33,10 @@ const ProtectedPage = (Component) => {
                 }
             }
         })
+
+        if (!user) {
+            return <p>Loading...</p>
+        }
     
         return (
             <Component {...otherProps} />

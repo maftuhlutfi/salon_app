@@ -16,8 +16,8 @@ const navList = {
             icon: 'icon-users'
         },
         {
-            title: 'Akun',
-            href: '/akun',
+            title: 'Akun Admin',
+            href: '/akun-admin',
             icon: 'icon-user'
         }
     ],
@@ -31,11 +31,6 @@ const navList = {
             title: 'Transaksi',
             href: '/transaksi',
             icon: 'icon-repeat'
-        },
-        {
-            title: 'Keranjang',
-            href: '/keranjang',
-            icon: 'icon-cart'
         }
     ]
 }

@@ -16,6 +16,7 @@ async function handler(req, res) {
         try {
             const result = await query(`UPDATE transaksi SET id_pelanggan=?, status_transaksi=?, tipe_bayar=?, status_pembayaran=?, tgl_bayar=?, alamat_kirim=? WHERE id_transaksi=?`, 
                 [id_pelanggan, status_transaksi, tipe_bayar, status_pembayaran, tgl_bayar, alamat_kirim, id])
+            console.log(result)
             return res.send('Transaksi berhasil diupdate.')
         } catch (e) {
             res.status(500).send('Terjadi kesalahan. Coba lagi beberapa saat.')
