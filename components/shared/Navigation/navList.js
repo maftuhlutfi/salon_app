@@ -6,6 +6,11 @@ const navList = {
             icon: 'icon-archive'
         },
         {
+            title: 'Kategori',
+            href: '/kategori',
+            icon: 'icon-grid'
+        },
+        {
             title: 'Transaksi',
             href: '/transaksi',
             icon: 'icon-repeat'
