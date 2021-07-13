@@ -183,8 +183,12 @@ const TransaksiPage = () => {
                                     <td className='text-right font-bold pl-4 pr-2 bg-white border-2 border-black'>{filteredByDateTransaksi().length}</td>
                                 </tr>
                                 <tr>
+                                    <td className='bg-black text-white border-2 border-black px-2'>Transaksi Selesai</td>
+                                    <td className='text-right font-bold pl-4 pr-2 bg-white border-2 border-black'>{filteredByDateTransaksi().filter(t => t.status_transaksi == 'selesai').length}</td>
+                                </tr>
+                                <tr>
                                     <td className='bg-black text-white border-2 border-black px-2'>Total {isAdmin ? 'Penjualan' : 'Pembayaran'}</td>
-                                    <td className='text-right font-bold pl-4 pr-2 bg-white border-2 border-black'>Rp. {formatHarga(filteredByDateTransaksi().reduce((total, item) => total += item.total_bayar, 0))}</td>
+                                    <td className='text-right font-bold pl-4 pr-2 bg-white border-2 border-black'>Rp. {formatHarga(filteredByDateTransaksi().reduce((total, item) => item.status_pembayaran == 'dibayar' ? total += item.total_bayar : total, 0))}</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -218,7 +222,6 @@ const TransaksiPage = () => {
                                       {isEdit && selecteIdTransaksi == id_transaksi ?
                                         <select name='status_transaksi' value={input.status_transaksi} onChange={handleChange} className='border text-sm rounded-lg border-black outline-none p-2'>
                                             <option value='proses'>proses</option>
-                                            <option value='batal'>batal</option>
                                             <option value='selesai'>selesai</option>
                                         </select>
                                         :

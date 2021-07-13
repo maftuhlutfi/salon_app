@@ -115,7 +115,8 @@ const AddTransaksiModal = ({show, onCancel}) => {
                         <option value='cod'>COD</option>
                         <option value='transfer'>Transfer</option>
                     </SelectInput>
-                    {tipe_bayar != 'langsung' && <TextInput id='alamat' name='alamat_kirim' value={alamat_kirim} label='Alamat kirim' onChange={handleChange} />}
+                    {tipe_bayar == 'transfer' && <p className='text-sm text-red-600 font-medium'>Pembayaran ke rekening: 888921023122 (Mandiri). Konfirmasi hubungi admin 088292122123.</p>}
+                    <TextInput id='alamat' name='alamat_kirim' value={alamat_kirim} label='Alamat kirim' onChange={handleChange} />
                 </div>
                 <div className='grid grid-cols-2 gap-4 text-lg'>
                     <button className='border-2 border-black py-2 rounded-xl hover:bg-black hover:text-white' onClick={onCancel}>
