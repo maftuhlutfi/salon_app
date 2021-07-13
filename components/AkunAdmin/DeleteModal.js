@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Modal from "../shared/Modal";
 import { getBearerToken } from "../utils/getToken";
 
-const DeleteModal = ({show, onClose, onConfirm, onCancel, idTransaksi}) => {
+const DeleteModal = ({show, onClose, onConfirm, onCancel, idUser}) => {
     const [errorMsg, setErrorMsg] = useState('')
     const [successMsg, setSuccessMsg] = useState('')
 
@@ -22,15 +22,7 @@ const DeleteModal = ({show, onClose, onConfirm, onCancel, idTransaksi}) => {
             }
           }
 
-        const res2 = await axios.get('/api/detail-transaksi/'+idTransaksi, config)
-        const detailTransaksi = await res2.data
-
-        const resAll = await axios.all(
-            detailTransaksi.map(item => axios.delete('/api/detail-transaksi/'+item.id_transaksi, {...config, data: {id_produk: item.id_produk, jumlah: item.jumlah}}))
-        )
-        console.log(resAll)
-        const res = await axios.delete('/api/transaksi/'+idTransaksi, config)
-        
+        const res = await axios.delete('/api/user/'+idUser, config)
         const resData = await res.data
         setSuccessMsg(resData)
         router.reload()
@@ -39,7 +31,7 @@ const DeleteModal = ({show, onClose, onConfirm, onCancel, idTransaksi}) => {
     return (
         <>
             <Modal show={show}>
-                <h1 className='text-2xl font-bold text-center mb-8'>Apakah anda akan menghapus transaksi ini?</h1>
+                <h1 className='text-2xl font-bold text-center mb-8'>Apakah anda akan menghapus admin ini?</h1>
                 <div className='grid grid-cols-2 gap-4 text-lg'>
                     <button className='border-2 border-black py-2 rounded-xl hover:bg-black hover:text-white' onClick={onCancel}>
                         Batal

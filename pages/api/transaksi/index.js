@@ -4,7 +4,13 @@ import withProtect from '../../../middleware/withProtect'
 async function handler(req, res) {
     if (req.method == 'GET') {
         try {
-            const result = await query(`SELECT t.*, u.nama as nama_pelanggan FROM transaksi t INNER JOIN user u ON t.id_pelanggan = u.id ${req.user.role == 'pelanggan' ? 'WHERE t.id_pelanggan=' + req.user.id : ''}`)
+            const result = await query(`SELECT t.*, u.nama as nama_pelanggan, SUM(dt.jumlah * p.harga_jual) AS total_bayar
+            FROM transaksi t 
+            INNER JOIN user u ON t.id_pelanggan = u.id
+            INNER JOIN detail_transaksi dt ON dt.id_transaksi = t.id_transaksi
+            INNER JOIN produk p ON p.id_produk = dt.id_produk
+            ${req.user.role == 'pelanggan' ? 'WHERE t.id_pelanggan=' + req.user.id : ''}
+            GROUP BY dt.id_transaksi`)
             return res.json(result)
         } catch (e) {
             console.log(e)

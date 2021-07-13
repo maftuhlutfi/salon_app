@@ -24,10 +24,11 @@ async function handler(req, res) {
         }
     }
     if (req.method == 'DELETE') {
-        const {id_produk} = req.body
+        const {id_produk, jumlah} = req.body
         try {
             await query(`DELETE FROM detail_transaksi WHERE id_transaksi=? AND id_produk=?`, [id, id_produk])
-            return res.send('Detail transaksi berhasil ditambahkan.')
+            await query(`UPDATE produk SET qty = qty + ? WHERE id_produk=?`, [jumlah, id_produk])
+            return res.send('Detail transaksi berhasil dihapus.')
         } catch (e) {
             res.status(500).send('Terjadi kesalahan. Coba lagi beberapa saat.')
         }

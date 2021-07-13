@@ -1,6 +1,6 @@
-const Section = ({children}) => {
+const Section = ({children, ...props}) => {
     return (
-        <div className='mt-8'>
+        <div className='mt-8' {...props}>
             {children}
         </div>
     );

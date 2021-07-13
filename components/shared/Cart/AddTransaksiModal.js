@@ -1,4 +1,5 @@
 import axios from "axios";
+import { useRouter } from "next/router";
 import { useContext, useEffect, useState } from "react";
 import TextInput from "../../LoginSignup/TextInput";
 import { getBearerToken } from "../../utils/getToken";
@@ -11,6 +12,8 @@ const AddTransaksiModal = ({show, onCancel}) => {
     const {user} = useContext(UserContext)
     const {cartItems, clearAllItem} = useContext(CartContext)
     const isAdmin = user.role == 'admin'
+
+    const router = useRouter()
 
     const initInput = {
         id_pelanggan: isAdmin ? '' : user.id,
@@ -52,9 +55,9 @@ const AddTransaksiModal = ({show, onCancel}) => {
     useEffect(() => {
         if (successMsg) {
             setTimeout(() => {
-                onCancel()
+                router.reload()
                 clearAllItem()
-            }, 3000)
+            }, 2000)
         }
     }, [successMsg])
 

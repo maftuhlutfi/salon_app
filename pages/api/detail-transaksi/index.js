@@ -14,6 +14,7 @@ async function handler(req, res) {
         const {id_transaksi, id_produk, jumlah} = req.body
         try {
             await query(`INSERT INTO detail_transaksi (id_transaksi, id_produk, jumlah) VALUES (?,?,?)`, [id_transaksi, id_produk, jumlah])
+            await query(`UPDATE produk SET qty = qty - ? WHERE id_produk=?`, [jumlah, id_produk])
             return res.send('Detail transaksi berhasil ditambahkan.')
         } catch (e) {
             res.status(500).send('Terjadi kesalahan. Coba lagi beberapa saat.')
