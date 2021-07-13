@@ -91,7 +91,7 @@ INSERT INTO `produk` (`id_produk`, `id_kategori`, `nama_produk`, `harga_jual`, `
 CREATE TABLE `transaksi` (
   `id_transaksi` int(255) NOT NULL,
   `id_pelanggan` int(255) DEFAULT NULL,
-  `tgl_transaksi` date DEFAULT current_timestamp(),
+  `tgl_transaksi` date DEFAULT curdate(),
   `status_transaksi` enum('proses','batal','selesai') DEFAULT 'proses',
   `tipe_bayar` enum('langsung','cod','transfer') DEFAULT NULL,
   `status_pembayaran` enum('belum dibayar','dibayar') DEFAULT 'belum dibayar',
