@@ -30,7 +30,7 @@ const KategoriFilter = ({kategoriActive, setKategoriActive}) => {
         <button onClick={handleClick} className='px-4 py-2 relative rounded-lg border-2 border-black hover:bg-gray-400 flex gap-2 items-center'>
             <i className='icon-filter' />
             Filter kategori
-            <div className={`absolute top-full bg-white right-0 rounded-md shadow-md mt-1 ${show ? 'block' : 'hidden'}`}>
+            <div className={`absolute top-full bg-white overflow-hidden z-40 right-0 rounded-md shadow-md mt-1 ${show ? 'block' : 'hidden'}`}>
                 {kategori && kategori.map(item => 
                     <p 
                         key={item.id_kategori} 
