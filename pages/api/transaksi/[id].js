@@ -23,8 +23,8 @@ async function handler(req, res) {
     }
     if (req.method == 'DELETE') {
         try {
-            const result = await query(`DELETE FROM transaksi WHERE id_transaksi=?`, [id])
-            return res.send('Transaksi berhasil dihapus.')
+            const result = await query(`UPDATE transaksi SET status_transaksi="batal" WHERE id_transaksi=?`, [id])
+            return res.send('Transaksi berhasil dibatalkan.')
         } catch (e) {
             console.log(id, e)
             res.status(500).send('Terjadi kesalahan. Coba lagi beberapa saat.')

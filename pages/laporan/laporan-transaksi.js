@@ -2,23 +2,23 @@ import axios from "axios";
 import Head from "next/head"
 import { useRouter } from "next/router";
 import { useContext, useEffect, useState } from "react";
-import { UserContext } from "../components/shared/Context";
-import Header from "../components/shared/Header";
-import MainContainer from "../components/shared/MainContainer";
-import Section from "../components/shared/Section";
-import DeleteModal from "../components/Transaksi/DeleteModal";
-import DetailModal from "../components/Transaksi/DetailModal";
-import formatDate from "../components/utils/formatDate";
-import formatHarga from "../components/utils/formatHarga";
-import { getBearerToken } from "../components/utils/getToken";
-import ProtectedPage from "../components/utils/ProtectedPage";
+import { UserContext } from "../../components/shared/Context";
+import Header from "../../components/shared/Header";
+import MainContainer from "../../components/shared/MainContainer";
+import Section from "../../components/shared/Section";
+import DeleteModal from "../../components/Transaksi/DeleteModal";
+import DetailModal from "../../components/Transaksi/DetailModal";
+import formatDate from "../../components/utils/formatDate";
+import formatHarga from "../../components/utils/formatHarga";
+import { getBearerToken } from "../../components/utils/getToken";
+import ProtectedPage from "../../components/utils/ProtectedPage";
 
 const TransaksiPage = () => {
     const router = useRouter()
 
     const [transaksi, setTransaksi] = useState([])
     const [selecteIdTransaksi, setSelecteIdTransaksi] = useState(null)
-    const [showCancelModal, setShowCancelModal] = useState(false)
+    const [showDeleteModal, setShowDeleteModal] = useState(false)
     const [showDetailModal, setShowDetailModal] = useState(false)
 
     const {user} = useContext(UserContext)
@@ -60,9 +60,9 @@ const TransaksiPage = () => {
         }, 3000)
     }, [successMsg, errorMsg])
 
-    const handleCancelClick = id => {
+    const handleDeleteClick = id => {
         setSelecteIdTransaksi(id)
-        setShowCancelModal(true)
+        setShowDeleteModal(true)
     }
 
     const handleDetailClick = id => {
@@ -74,11 +74,6 @@ const TransaksiPage = () => {
         const selectedTransaksi = transaksi.find(t => t.id_transaksi == id)
         const isBayar = action == 'dibayar'
         const isSelesai = action == 'selesai'
-
-        if (isSelesai && selectedTransaksi.status_pembayaran != 'dibayar') {
-            alert('Anda belum membayar.')
-            return
-        }
 
         const config = {
             headers: {
@@ -102,12 +97,25 @@ const TransaksiPage = () => {
             [name]: formatDate(setHoursToZero(new Date(value)))
         }))
     }
-    
-    const handlePrintInvoice = id => {
-        const selectedTransaksi = transaksi.find(t => t.id_transaksi == id)
-        console.log(selectedTransaksi)
 
-        window.open(`/cetak-invoice?id_transaksi=${id}`, 'Cetak Invoice', 'width=800, height=750, resizeable=no, left=50, top=50')
+    const handleCetak = () => {
+        var originalContents = document.body.innerHTML
+
+        document.querySelectorAll('.show-on-print').forEach(item => {
+            item.style.display = 'block'
+        })
+
+        document.querySelectorAll('.hide-on-print').forEach(item => {
+            item.style.display = 'none'
+        })
+
+        var printContents = document.getElementById('transaksi-print-area').innerHTML
+
+        document.body.innerHTML = printContents
+
+        window.print()
+
+        router.reload()
     }
 
     const filteredByDateTransaksi = () => {
@@ -117,19 +125,13 @@ const TransaksiPage = () => {
         return transaksi.filter(t => setHoursToZero(new Date(t.tgl_transaksi)) >= from && setHoursToZero(new Date(t.tgl_transaksi)) <= to) 
     }
 
-    const statusColor = {
-        proses: 'bg-yellow-400',
-        selesai: 'bg-green-400',
-        batal: 'bg-red-400'
-    }
-
     return (
         <>
             <Head>
-                <title>Transaksi</title>
+                <title>Laporan Transaksi</title>
             </Head>
             <MainContainer>
-                <Header title='Transaksi' subTitle='Daftar semua transaksi.' />
+                <Header title='Laporan Transaksi' subTitle='Daftar semua transaksi.' />
                 <div id='transaksi-print-area'>
                 <Section>
                     <div className='flex justify-between items-center'>
@@ -139,11 +141,31 @@ const TransaksiPage = () => {
                                 {'  ─  '}
                                 <input name='to' className='p-2 border rounded-md' type='date' value={dateInput.to} onChange={handleDateChange} />
                             </div>
+                            {isAdmin && <button className='bg-black text-white px-4 py-1.5 rounded-xl mr-2 flex gap-2 items-center' style={{width: 'fit-content'}} onClick={handleCetak}>
+                                <i className='icon-printer' />
+                                Cetak
+                            </button>}
                         </div>
                         <div className='hidden show-on-print'>
                             <h1 className='text-2xl font-bold mb-2'>Data Transaksi</h1>
                             <p>Tanggal {new Date(dateInput.from).toLocaleDateString()} ─ {new Date(dateInput.to).toLocaleDateString()}</p>
                         </div>
+                        <table className='text-lg border-2'>
+                            <tbody>
+                                <tr>
+                                    <td className='bg-black text-white border-2 border-black px-2'>Total Transaksi</td>
+                                    <td className='text-right font-bold pl-4 pr-2 bg-white border-2 border-black'>{filteredByDateTransaksi().length}</td>
+                                </tr>
+                                <tr>
+                                    <td className='bg-black text-white border-2 border-black px-2'>Transaksi Selesai</td>
+                                    <td className='text-right font-bold pl-4 pr-2 bg-white border-2 border-black'>{filteredByDateTransaksi().filter(t => t.status_transaksi == 'selesai').length}</td>
+                                </tr>
+                                <tr>
+                                    <td className='bg-black text-white border-2 border-black px-2'>Total {isAdmin ? 'Penjualan' : 'Pembayaran'}</td>
+                                    <td className='text-right font-bold pl-4 pr-2 bg-white border-2 border-black'>Rp. {formatHarga(filteredByDateTransaksi().reduce((total, item) => item.status_pembayaran == 'dibayar' ? total += item.total_bayar : total, 0))}</td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </Section>
                 <Section>
@@ -160,7 +182,6 @@ const TransaksiPage = () => {
                                 <th className='py-2 border-2 border-white'>Status Bayar</th>
                                 <th className='py-2 border-2 border-white'>Tanggal Bayar</th>
                                 <th className='py-2 border-2 border-white hide-on-print'>Alamat Kirim</th>
-                                <th className='py-2 border-2 border-white hide-on-print'>Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -170,10 +191,10 @@ const TransaksiPage = () => {
                                   {isAdmin && <td className='py-1 px-2 border-2 text-center'>{id_pelanggan}</td>}
                                   {isAdmin && <td className='py-1 px-2 border-2 '>{nama_pelanggan}</td>}
                                   <td className='py-1 px-2 border-2 text-center'>{new Date(tgl_transaksi).toLocaleDateString()}</td>
-                                  <td className={`py-1 px-2 border-2 text-center ${statusColor[status_transaksi]}`}>{status_transaksi}</td>
+                                  <td className='py-1 px-2 border-2 text-center'>{status_transaksi}</td>
                                   <td className='py-1 px-2 border-2 text-center'>Rp. {formatHarga(total_bayar)}</td>
                                   <td className='py-1 px-2 border-2 text-center'>{tipe_bayar}</td>
-                                  <td className={`py-1 px-2 border-2 text-center ${status_pembayaran == 'dibayar' ? 'bg-green-400': 'bg-red-400'}`}>{status_pembayaran}</td>
+                                  <td className='py-1 px-2 border-2 text-center'>{status_pembayaran}</td>
                                   <td className='py-1 px-2 border-2 text-center'>{tgl_bayar ? new Date(tgl_bayar).toLocaleDateString() : '-'}</td>
                                   <td className='py-1 px-2 border-2 text-center hide-on-print'>
                                       {alamat_kirim ?
@@ -186,30 +207,6 @@ const TransaksiPage = () => {
                                         :
                                         '-'
                                       }
-                                  </td>
-                                  <td className='py-1 px-2 border-2 text-center hide-on-print'>
-                                        <button className='bg-black text-white px-4 py-1 rounded-xl mr-2' onClick={() => handleDetailClick(id_transaksi)}>
-                                            <i className='icon-info' />
-                                        </button>
-                                        {!isAdmin && (status_transaksi != 'selesai' || status_pembayaran != 'dibayar') &&  status_transaksi != 'batal' &&
-                                            <>
-                                            <button className='bg-black text-white px-4 py-1 rounded-xl mr-2 group relative'>
-                                                <i className='icon-edit' />
-                                                <div className='absolute top-full mt-1 right-0 z-10 bg-white text-black rounded-lg overflow-hidden hidden group-focus:block border-2 border-black'>
-                                                    <p className={`whitespace-nowrap px-4 py-2 text-left hover:bg-gray-300 ${status_pembayaran == 'dibayar' && 'hidden'}`} onClick={() => handleEditClick(id_transaksi, 'dibayar')}>Konfirmasi pembayaran</p>
-                                                    <p className={`whitespace-nowrap px-4 py-2 text-left hover:bg-gray-300 ${status_transaksi == 'selesai' && 'hidden'}`} onClick={() => handleEditClick(id_transaksi, 'selesai')}>Transaksi selesai</p>
-                                                </div>
-                                            </button>
-                                            </>
-                                        }
-                                        {!isAdmin && status_transaksi != 'batal' && 
-                                            <button className='bg-black text-white px-4 py-1 rounded-xl  mr-2' onClick={() => handleCancelClick(id_transaksi)}>
-                                                ✖
-                                            </button>
-                                        }
-                                        <button className='bg-black text-white px-4 py-1 rounded-xl text-center' onClick={() => handlePrintInvoice(id_transaksi)}>
-                                            <i className='icon-printer' />
-                                        </button>
                                   </td>
                               </tr>
                             )}
@@ -224,8 +221,8 @@ const TransaksiPage = () => {
                 idTransaksi={selecteIdTransaksi}
             />
             <DeleteModal 
-                show={showCancelModal}
-                onCancel={() => setShowCancelModal(false)}
+                show={showDeleteModal}
+                onCancel={() => setShowDeleteModal(false)}
                 idTransaksi={selecteIdTransaksi}
             />
             {successMsg && 

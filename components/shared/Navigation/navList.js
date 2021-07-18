@@ -16,6 +16,21 @@ const navList = {
             icon: 'icon-repeat'
         },
         {
+            title: 'Laporan',
+            href: '/laporan',
+            icon: 'icon-doc',
+            subMenu: [
+                {
+                    title: 'Transaksi',
+                    href: '/laporan/laporan-transaksi'
+                },
+                {
+                    title: 'Penjualan',
+                    href: '/laporan/laporan-penjualan'
+                }
+            ]
+        },
+        {
             title: 'Pelanggan',
             href: '/pelanggan',
             icon: 'icon-users'

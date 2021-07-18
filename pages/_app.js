@@ -14,7 +14,7 @@ Router.events.on('routeChangeError', () => NProgress.done());
 
 function MyApp({ Component, pageProps }) {
   const pathname = useRouter().pathname
-  const pathWithoutNav = ['/login', '/daftar']
+  const pathWithoutNav = ['/login', '/daftar', '/cetak-invoice']
 
   return (
     <>

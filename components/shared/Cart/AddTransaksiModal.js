@@ -13,6 +13,8 @@ const AddTransaksiModal = ({show, onCancel}) => {
     const {cartItems, clearAllItem} = useContext(CartContext)
     const isAdmin = user.role == 'admin'
 
+    const [bankInput, setBankInput] = useState('bri')
+
     const router = useRouter()
 
     const initInput = {
@@ -55,7 +57,7 @@ const AddTransaksiModal = ({show, onCancel}) => {
     useEffect(() => {
         if (successMsg) {
             setTimeout(() => {
-                router.reload()
+                router.push('/transaksi')
                 clearAllItem()
             }, 2000)
         }
@@ -98,6 +100,13 @@ const AddTransaksiModal = ({show, onCancel}) => {
 
     }
 
+    const rekening = {
+        bri: '034 101 000 743 303',
+        bni: '023 827 2088',
+        mandiri: '0700 000 899 992',
+        bca: '731 025 2527'
+    }
+
     return (
         <>
             <Modal show={show}>
@@ -115,8 +124,18 @@ const AddTransaksiModal = ({show, onCancel}) => {
                         <option value='cod'>COD</option>
                         <option value='transfer'>Transfer</option>
                     </SelectInput>
-                    {tipe_bayar == 'transfer' && <p className='text-sm text-red-600 font-medium'>Pembayaran ke rekening: 888921023122 (Mandiri). Konfirmasi hubungi admin 088292122123.</p>}
-                    <TextInput id='alamat' name='alamat_kirim' value={alamat_kirim} label='Alamat kirim' onChange={handleChange} />
+                    {tipe_bayar == 'transfer' && 
+                        <>
+                            <SelectInput id='rekening' name='rekening' label='Pilih Bank' onChange={e => setBankInput(e.target.value)} value={bankInput}>
+                                <option value='bri' defaultChecked>BRI</option>
+                                <option value='bca'>BCA</option>
+                                <option value='bni'>BNI</option>
+                                <option value='mandiri'>Mandiri</option>
+                            </SelectInput>
+                            <p className='text-sm text-red-600 font-medium'>Nomor rekening: {rekening[bankInput]} (Yongki Salon). Transaksi akan batal otomatis jika tidak melakukan pembayaran dalam 2 hari.</p>
+                        </>
+                    }
+                    {tipe_bayar != 'langsung' && <TextInput id='alamat' name='alamat_kirim' value={alamat_kirim} label='Alamat kirim' onChange={handleChange} />}
                 </div>
                 <div className='grid grid-cols-2 gap-4 text-lg'>
                     <button className='border-2 border-black py-2 rounded-xl hover:bg-black hover:text-white' onClick={onCancel}>
