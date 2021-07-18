@@ -6,7 +6,7 @@ import axios from "axios";
 import { getBearerToken } from "../utils/getToken";
 import { useRouter } from "next/router";
 
-const EditModal = ({produk, show, onClose, onConfirm, onCancel}) => {
+const EditModal = ({produk, show, onClose, onConfirm, onCancel, allKategori}) => {
     const router = useRouter()
 
     const [input, setInput] = useState({
@@ -17,8 +17,6 @@ const EditModal = ({produk, show, onClose, onConfirm, onCancel}) => {
     const [errorMsg, setErrorMsg] = useState('')
     const [successMsg, setSuccessMsg] = useState('')
     const [baseImg, setBaseImg] = useState(null)
-
-    const [allKategori, setAllKategori] = useState([])
 
     const {deskripsi,gambar_produk,harga_jual,id_produk,kategori,nama_produk,qty} = input
 
@@ -31,22 +29,6 @@ const EditModal = ({produk, show, onClose, onConfirm, onCancel}) => {
         setSuccessMsg('')
         setBaseImg(null)
     }, [show])
-
-    useEffect(() => {
-        const getKategori = async () => {
-            const config = {
-                headers: {
-                    'Authorization': getBearerToken()
-                }
-            }
-
-            const res = await axios.get('/api/kategori', config)
-            const kategoriData = await res.data
-            setAllKategori(kategoriData)
-        }
-
-        getKategori()
-    }, [])
 
     const handleChange = e => {
         const {name, value, type, files} = e.target

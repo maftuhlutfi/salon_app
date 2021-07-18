@@ -11,8 +11,12 @@ export const config = {
 async function handler(req, res) {
     if (req.method == 'GET') {
         try {
-            const result = await query(`SELECT p.id_produk, p.nama_produk, p.harga_jual, p.qty, p.gambar_produk, p.deskripsi, k.nama_kategori, k.id_kategori AS kategori FROM produk p
-                INNER JOIN kategori k ON p.id_kategori = k.id_kategori `)
+            const result = await query(`SELECT p.id_produk, p.nama_produk, p.harga_jual, p.qty, p.gambar_produk, p.deskripsi, k.nama_kategori, k.id_kategori AS kategori, SUM(dt.jumlah) AS terjual
+                FROM produk p
+                INNER JOIN kategori k ON p.id_kategori = k.id_kategori
+                LEFT JOIN detail_transaksi dt ON dt.id_produk = p.id_produk
+                GROUP BY p.id_produk
+            `)
             return res.json(result)
         } catch (e) {
             res.status(500).send('Terjadi kesalahan. Coba lagi beberapa saat.')
