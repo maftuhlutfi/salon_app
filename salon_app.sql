@@ -129,7 +129,7 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`id`, `nama`, `email`, `password`, `role`, `telepon`, `alamat`) VALUES
-(1, 'Admin', 'admin@gmail.com', '$2b$08$EtDDhvPZU4QopEJTNQR1UO2T2dbc5sy9YChhZn2IU9rcVXACVZkmO', 'admin', '081123123123', 'Alamat 123')
+(1, 'Admin', 'admin@gmail.com', '$2b$08$EtDDhvPZU4QopEJTNQR1UO2T2dbc5sy9YChhZn2IU9rcVXACVZkmO', 'admin', '081123123123', 'Alamat 123');
 
 --
 -- Indexes for dumped tables
