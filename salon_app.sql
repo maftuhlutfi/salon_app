@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 13, 2021 at 05:48 AM
+-- Generation Time: Jul 28, 2021 at 03:04 PM
 -- Server version: 10.4.16-MariaDB
 -- PHP Version: 7.4.12
 
@@ -32,10 +32,6 @@ CREATE TABLE `detail_transaksi` (
   `id_produk` int(255) NOT NULL,
   `jumlah` int(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `detail_transaksi`
---
 
 -- --------------------------------------------------------
 
@@ -77,10 +73,23 @@ CREATE TABLE `produk` (
 --
 
 INSERT INTO `produk` (`id_produk`, `id_kategori`, `nama_produk`, `harga_jual`, `qty`, `gambar_produk`, `deskripsi`) VALUES
-(1, 1, 'Shinzui Skin Lightening Body Scrub Matsu', 18000, 20, 'k8nhHRz8ew.jpeg', 'Untuk mencerahkan kulit'),
-(2, 2, 'Elips', 10000, 20, 'QR4m4KlK22.jpeg', 'Untuk menata rambut dengan catokan'),
-(3, 1, 'Wardah soft body scrub', 35000, 20, 'Uv2RdCgamB.jpeg', 'Memiliki wangi segar, untuk kulit sensitif'),
-(4, 1, 'Mustika Ratu Coffe Body Scrub', 50000, 20, 'o4QAHcEwNO.jpeg', 'Untuk mengatasi Atasi bau badan');
+(1, 1, 'Shinzui Skin Lightening Body Scrub Matsu', 18000, 17, 'k8nhHRz8ew.jpeg', 'Untuk mencerahkan kulit'),
+(2, 2, 'Elips', 10000, 16, 'QR4m4KlK22.jpeg', 'Untuk menata rambut dengan catokan'),
+(3, 1, 'Wardah soft body scrub', 35000, 17, 'Uv2RdCgamB.jpeg', 'Memiliki wangi segar, untuk kulit sensitif'),
+(4, 1, 'Mustika Ratu Coffe Body Scrub', 50000, 18, 'o4QAHcEwNO.jpeg', 'Untuk mengatasi Atasi bau badan'),
+(6, 1, 'Herborist lulur zaitun', 13000, 19, 'Z1qLYGw3Jz.png', 'Merawat kulit kering yang kasar dan kusam'),
+(7, 1, 'Aiwax Sugar Waxing kit', 89000, 20, '5bBAEaC2ZL.jpeg', 'Untuk mencerahkan kulit'),
+(8, 1, 'Sugar pot honey wax', 95000, 20, 'CW0rAPxrQc.jpeg', 'Untuk membersihkan kulit dari bulu halus yang mengganggu'),
+(9, 1, 'Cool sugar wax', 79000, 20, 'cT12YKhOk2.jpeg', 'Untuk mencerahkan dan membuat kulit lebih sehat'),
+(10, 1, 'Mirael sugar waxing kit', 85000, 20, 'Gi4s9Qf58l.jpeg', 'Untuk digunakan pada kaki, tangan, ketiak, paha'),
+(11, 1, 'Veet almond wax strips', 77000, 20, 'IarOr6NVkM.jpeg', 'Untuk menghilangkan bulu pada tubuh'),
+(12, 2, 'Loreal Paris', 40000, 20, 'HvcnPr2rum.jpeg', 'Untuk rambut kering, rusak'),
+(13, 2, 'TRESemme Deep', 40000, 20, 'atYfYh0yQ3.jpeg', 'Untuk rambut kering'),
+(14, 2, 'Makarizo Hair Energy', 75000, 20, 'U1ywHUvpHq.jpeg', 'Untuk rambut rontok, kusam'),
+(15, 2, 'Pantene total damage', 40000, 20, 'eJtJEBQZ0a.jpeg', 'Untuk menjaga kesehatan rambut dan memberikan hidrasi pada rambut'),
+(16, 2, 'Matrix ', 68000, 20, 'ujLXY0W048.jpeg', 'Untuk pewarna rambut'),
+(17, 2, 'Makarizo', 70000, 20, 'fNTG9IcOcc.jpeg', 'Untuk pewarna rambut'),
+(18, 2, 'Miranda', 100000, 20, 'TgnpUZXFE6.jpeg', 'Untuk pewarna rambut');
 
 -- --------------------------------------------------------
 
@@ -91,17 +100,13 @@ INSERT INTO `produk` (`id_produk`, `id_kategori`, `nama_produk`, `harga_jual`, `
 CREATE TABLE `transaksi` (
   `id_transaksi` int(255) NOT NULL,
   `id_pelanggan` int(255) DEFAULT NULL,
-  `tgl_transaksi` date,
+  `tgl_transaksi` date DEFAULT curdate(),
   `status_transaksi` enum('proses','batal','selesai') DEFAULT 'proses',
   `tipe_bayar` enum('langsung','cod','transfer') DEFAULT NULL,
   `status_pembayaran` enum('belum dibayar','dibayar') DEFAULT 'belum dibayar',
   `tgl_bayar` date DEFAULT NULL,
   `alamat_kirim` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `transaksi`
---
 
 -- --------------------------------------------------------
 
@@ -124,7 +129,7 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`id`, `nama`, `email`, `password`, `role`, `telepon`, `alamat`) VALUES
-(1, 'Admin', 'admin@gmail.com', '$2b$08$EtDDhvPZU4QopEJTNQR1UO2T2dbc5sy9YChhZn2IU9rcVXACVZkmO', 'admin', '081123123123', 'Alamat 123');
+(1, 'Admin', 'admin@gmail.com', '$2b$08$EtDDhvPZU4QopEJTNQR1UO2T2dbc5sy9YChhZn2IU9rcVXACVZkmO', 'admin', '081123123123', 'Alamat 123')
 
 --
 -- Indexes for dumped tables
