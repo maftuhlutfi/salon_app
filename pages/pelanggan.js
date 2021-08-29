@@ -61,13 +61,13 @@ const Pelanggan = () => {
             </Head>
             <MainContainer>
                 <Header title='Daftar Pelanggan' subTitle='Kelola semua pelanggan' />
-                <Section>
+                {/* <Section>
                     <div className='flex justify-end'>
                         <button className='bg-black text-white px-4 py-2 rounded-xl mr-2 flex gap-2 items-center' style={{width: 'fit-content'}} onClick={() => setShowAddModal(true)}>
                             + Tambah Pelanggan
                         </button>
                     </div>
-                </Section>
+                </Section> */}
                 <Section>
                     <table className='border-2 w-full'>
                         <thead>

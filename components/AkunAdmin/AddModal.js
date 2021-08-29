@@ -75,7 +75,7 @@ const AddModal = ({ show, onCancel }) => {
     return (
         <>
             <Modal show={show}>
-                <h1 className='text-2xl font-bold text-center'>Tambah Pelanggan</h1>
+                <h1 className='text-2xl font-bold text-center'>Tambah Admin</h1>
                 <div className='my-8 flex flex-col gap-4 max-h-80 overflow-y-auto px-1 pb-8'>
                     <TextInput label='Nama' id='nama' name='nama' onChange={handleChange} value={nama} />
                     <TextInput label='Email' id='email' name='email' type='email' onChange={handleChange} value={email} />

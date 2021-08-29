@@ -10,13 +10,14 @@ const withProtect = handler => {
         const bearerToken = req.headers['authorization'].split(" ")[1]
         verify(bearerToken, process.env.SECRET, async (err, decoded) => {
             if (!err && decoded) {
-                const result = await query('SELECT id, nama, email, role FROM user WHERE email = ?', [decoded.email])
+                const result = await query('SELECT id, nama, email, role, alamat FROM user WHERE email = ?', [decoded.email])
                 const user = await result[0]
                 req.user = {
                     id: user.id,
                     nama: user.nama,
                     email: user.email,
-                    role: user.role
+                    role: user.role,
+                    alamat: user.alamat
                 }
                 return handler(req, res)
             } else {

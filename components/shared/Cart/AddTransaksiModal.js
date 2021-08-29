@@ -13,14 +13,12 @@ const AddTransaksiModal = ({show, onCancel}) => {
     const {cartItems, clearAllItem} = useContext(CartContext)
     const isAdmin = user.role == 'admin'
 
-    const [bankInput, setBankInput] = useState('bri')
-
     const router = useRouter()
 
     const initInput = {
         id_pelanggan: isAdmin ? '' : user.id,
-        tipe_bayar: "langsung",
-        alamat_kirim: ""
+        tipe_bayar: "transfer",
+        alamat_kirim: isAdmin ? "" : user.alamat
     }
 
     const [input, setInput] = useState(initInput)
@@ -65,6 +63,20 @@ const AddTransaksiModal = ({show, onCancel}) => {
 
     const handleChange = e => {
         const {name, value} = e.target
+
+        if (name == 'id_pelanggan') {
+            if (value) {
+                setInput(prev => ({
+                    ...prev,
+                    alamat_kirim: pelanggan.filter(p => p.id == value)[0].alamat
+                }))
+            } else {
+                setInput(prev => ({
+                    ...prev,
+                    alamat_kirim: ''
+                }))
+            }
+        }
 
         setInput(prev => ({
             ...prev,
@@ -120,21 +132,9 @@ const AddTransaksiModal = ({show, onCancel}) => {
                         </DataList>
                     }
                     <SelectInput id='tipe-bayar' name='tipe_bayar' label='Tipe Bayar' onChange={handleChange} value={tipe_bayar}>
-                        <option value='langsung' defaultChecked>Langsung</option>
-                        <option value='cod'>COD</option>
-                        <option value='transfer'>Transfer</option>
+                        <option value='transfer' defaultChecked>Transfer</option>
                     </SelectInput>
-                    {tipe_bayar == 'transfer' && 
-                        <>
-                            <SelectInput id='rekening' name='rekening' label='Pilih Bank' onChange={e => setBankInput(e.target.value)} value={bankInput}>
-                                <option value='bri' defaultChecked>BRI</option>
-                                <option value='bca'>BCA</option>
-                                <option value='bni'>BNI</option>
-                                <option value='mandiri'>Mandiri</option>
-                            </SelectInput>
-                            <p className='text-sm text-red-600 font-medium'>Nomor rekening: {rekening[bankInput]} (Yongki Salon). Transaksi akan batal otomatis jika tidak melakukan pembayaran dalam 2 hari.</p>
-                        </>
-                    }
+                    <p className='text-sm text-red-600 font-medium'>Nomor rekening BRI: 034 101 000 743 303 (Yongki Salon). Transaksi akan batal otomatis jika tidak melakukan pembayaran dalam 2 hari.</p>
                     {tipe_bayar != 'langsung' && <TextInput id='alamat' name='alamat_kirim' value={alamat_kirim} label='Alamat kirim' onChange={handleChange} />}
                 </div>
                 <div className='grid grid-cols-2 gap-4 text-lg'>
